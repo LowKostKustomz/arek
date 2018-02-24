@@ -28,17 +28,11 @@ import CoreLocation
 
 final public class ArekLocationAlways: ArekBaseLocation {
     
-    override public init() {
-        let identifier = "ArekLocationAlways"
-        super.init(identifier: identifier)
-        
-        self.identifier = identifier
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-        
-        self.identifier = "ArekLocationAlways"
+    override public var identifier: String {
+        get {
+            return "ArekLocationAlways"
+        }
+        set { }
     }
     
     override public func askForPermission(completion: @escaping ArekPermissionResponse) {

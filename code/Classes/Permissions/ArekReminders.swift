@@ -28,14 +28,6 @@ import EventKit
 
 open class ArekReminders: ArekBasePermission, ArekPermissionProtocol {
     open var identifier: String = "ArekReminders"
-    
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
 
     open func status(completion: @escaping ArekPermissionResponse) {
         let status = EKEventStore.authorizationStatus(for: .reminder)

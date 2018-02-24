@@ -33,14 +33,6 @@ open class ArekHealth: ArekBasePermission, ArekPermissionProtocol {
     var hkObjectType: HKObjectType?
     var hkSampleTypesToShare: Set<HKSampleType>?
     var hkSampleTypesToRead: Set<HKSampleType>?
-    
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
 
     open func status(completion: @escaping ArekPermissionResponse) {
         guard let objectType = self.hkObjectType else {

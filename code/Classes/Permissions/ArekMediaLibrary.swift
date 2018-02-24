@@ -29,14 +29,6 @@ import MediaPlayer
 open class ArekMediaLibrary: ArekBasePermission, ArekPermissionProtocol {
     open var identifier: String = "ArekMediaLibrary"
     
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
-    
     open func status(completion: @escaping ArekPermissionResponse) {
         if #available(iOS 9.3, *) {
             let status = MPMediaLibrary.authorizationStatus()

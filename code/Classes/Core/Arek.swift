@@ -58,23 +58,8 @@ open class ArekBasePermission {
     open var configuration: ArekConfiguration = ArekConfiguration(frequency: .Always, presentInitialPopup:
         true, presentReEnablePopup: true)
     
-    var initialPopupData: ArekPopupData = ArekPopupData()
-    var reEnablePopupData: ArekPopupData = ArekPopupData()
-    
-    public init(identifier: String) {
-        let data = ArekLocalizationManager(permission: identifier)
-        
-        self.initialPopupData = ArekPopupData(title: data.initialTitle,
-                                             message: data.initialMessage,
-                                             image: data.image,
-                                             allowButtonTitle: data.allowButtonTitle,
-                                             denyButtonTitle: data.denyButtonTitle)
-        self.reEnablePopupData = ArekPopupData(title: data.reEnableTitle,
-                                              message:  data.reEnableMessage,
-                                              image: data.image,
-                                              allowButtonTitle: data.allowButtonTitle,
-                                              denyButtonTitle: data.denyButtonTitle)
-    }
+    var onInitialPopup: (() -> Void)? = nil
+    var onReEnablePopup: (() -> Void)? = nil
 
     /**
      Base init shared among each permission provided by Arek
@@ -84,51 +69,17 @@ open class ArekBasePermission {
          - initialPopupData: title and message related to pre-iOS popup
          - reEnablePopupData: title and message related to re-enable permission popup
      */
-    public init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
+    public init(configuration: ArekConfiguration? = nil, onInitialPopup: (() -> Void)?, onReEnablePopup: (() -> Void)?) {
         self.configuration = configuration ?? self.configuration
-        self.initialPopupData = initialPopupData ?? self.initialPopupData
-        self.reEnablePopupData = reEnablePopupData ?? self.reEnablePopupData
+        self.onInitialPopup = onInitialPopup
+        self.onReEnablePopup = onReEnablePopup
     }
     
     private func manageInitialPopup(completion: @escaping ArekPermissionResponse) {
         if self.configuration.presentInitialPopup {
-            self.presentInitialPopup(title: self.initialPopupData.title, message: self.initialPopupData.message, image: self.initialPopupData.image, allowButtonTitle: self.initialPopupData.allowButtonTitle, denyButtonTitle: self.initialPopupData.denyButtonTitle, completion: completion)
+            self.onInitialPopup?()
         } else {
             (self as? ArekPermissionProtocol)?.askForPermission(completion: completion)
-        }
-    }
-    
-    private func presentInitialPopup(title: String, message: String, image: String? = nil, allowButtonTitle: String, denyButtonTitle: String, completion: @escaping ArekPermissionResponse) {
-        switch self.initialPopupData.type {
-        case .native:
-            self.presentInitialNativePopup(title: title, message: message, allowButtonTitle: allowButtonTitle, denyButtonTitle: denyButtonTitle, completion: completion)
-        }
-    }
-    
-    private func presentInitialNativePopup(title: String, message: String, allowButtonTitle: String, denyButtonTitle: String, completion: @escaping ArekPermissionResponse) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let allow = UIAlertAction(title: allowButtonTitle, style: .default) { _ in
-            (self as? ArekPermissionProtocol)?.askForPermission(completion: completion)
-            alert.dismiss(animated: true, completion: nil)
-        }
-        
-        let deny = UIAlertAction(title: denyButtonTitle, style: .cancel) { _ in
-            completion(.denied)
-            alert.dismiss(animated: true, completion: nil)
-        }
-        
-        alert.addAction(deny)
-        alert.addAction(allow)
-        
-        if var topController = UIApplication.shared.keyWindow?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
-            }
-
-            DispatchQueue.main.async {
-                topController.present(alert, animated: true, completion: nil)
-            }
         }
     }
     
@@ -136,47 +87,8 @@ open class ArekBasePermission {
         guard let permission = self as? ArekPermissionProtocol else { return }
         
         if self.configuration.canPresentReEnablePopup(permission: permission) {
-            self.presentReEnablePopup(title: self.reEnablePopupData.title, message: self.reEnablePopupData.message, image: self.reEnablePopupData.image, allowButtonTitle: self.reEnablePopupData.allowButtonTitle, denyButtonTitle: self.reEnablePopupData.denyButtonTitle)
+            self.onReEnablePopup?()
         }
-    }
-
-    private func presentReEnablePopup(title: String, message: String, image: String?, allowButtonTitle: String, denyButtonTitle: String) {
-        switch self.reEnablePopupData.type {
-        case .native:
-            self.presentReEnableNativePopup(title: title, message: message, allowButtonTitle: allowButtonTitle, denyButtonTitle: denyButtonTitle)
-        }
-    }
-    
-    private func presentReEnableNativePopup(title: String, message: String, allowButtonTitle: String, denyButtonTitle: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let allow = UIAlertAction(title: allowButtonTitle, style: .default) { _ in
-            alert.dismiss(animated: true, completion: nil)
-            
-            guard let url = URL(string: UIApplicationOpenSettingsURLString) else { return }
-            
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else if #available(iOS 9.0, *) {
-                UIApplication.shared.openURL(url)
-            }
-        }
-        
-        let deny = UIAlertAction(title: denyButtonTitle, style: .cancel) { _ in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        
-        alert.addAction(deny)
-        alert.addAction(allow)
-        
-        if var topController = UIApplication.shared.keyWindow?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
-            }
-            
-            topController.present(alert, animated: true, completion: nil)
-        }
-
     }
     
     open func manage(completion: @escaping ArekPermissionResponse) {

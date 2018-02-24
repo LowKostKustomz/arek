@@ -29,14 +29,6 @@ import CloudKit
 open class ArekCloudKit: ArekBasePermission, ArekPermissionProtocol {
     open var identifier = "ArekCloudKit"
 
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
-    
     open func status(completion: @escaping ArekPermissionResponse) {
         CKContainer.default().status(forApplicationPermission: CKApplicationPermissions.userDiscoverability, completionHandler: { applicationPermissionStatus, error in
             

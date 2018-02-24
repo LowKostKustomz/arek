@@ -67,15 +67,6 @@ open class ArekNotifications: ArekBasePermission, ArekPermissionProtocol {
     
     open var identifier: String = "ArekNotifications"
     open var notificationTypes: [ArekNotificationType] = [.alert, .badge, .sound, .carPlay]
-    
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        self.notificationTypes = [.alert, .badge, .sound, .carPlay]
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
 
     open func status(completion: @escaping ArekPermissionResponse) {
         if #available(iOS 10.0, *) {

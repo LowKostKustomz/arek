@@ -34,18 +34,6 @@ public class ArekBaseLocation: ArekBasePermission, ArekPermissionProtocol {
         }
     }
     private var locationDelegate: ArekBaseLocationDelegate?
-    
-    public init() {
-        super.init(identifier: self.identifier)
-    }
-    
-    public override init(identifier: String) {
-        super.init(identifier: identifier)
-    }
-    
-    public override init(configuration: ArekConfiguration? = nil, initialPopupData: ArekPopupData? = nil, reEnablePopupData: ArekPopupData? = nil) {
-        super.init(configuration: configuration, initialPopupData: initialPopupData, reEnablePopupData: reEnablePopupData)
-    }
 
     public func status(completion: @escaping ArekPermissionResponse) {
         guard CLLocationManager.locationServicesEnabled() else { return completion(.notDetermined) }
