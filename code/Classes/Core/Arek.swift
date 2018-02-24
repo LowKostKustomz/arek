@@ -55,7 +55,7 @@ public protocol ArekPermissionProtocol: class {
  Don't instantiate ArekBasePermission directly.
  */
 open class ArekBasePermission {
-    var configuration: ArekConfiguration = ArekConfiguration(frequency: .Always, presentInitialPopup:
+    open var configuration: ArekConfiguration = ArekConfiguration(frequency: .Always, presentInitialPopup:
         true, presentReEnablePopup: true)
     
     var initialPopupData: ArekPopupData = ArekPopupData()
