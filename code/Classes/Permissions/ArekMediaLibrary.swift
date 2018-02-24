@@ -58,18 +58,14 @@ open class ArekMediaLibrary: ArekBasePermission, ArekPermissionProtocol {
             MPMediaLibrary.requestAuthorization { status in
                 switch status {
                 case .authorized:
-                    print("[🚨 Arek 🚨] 💽 permission authorized by user ✅")
                     return completion(.authorized)
                 case .restricted, .denied:
-                    print("[🚨 Arek 🚨] 💽 permission denied by user ⛔️")
                     return completion(.denied)
                 case .notDetermined:
-                    print("[🚨 Arek 🚨] 💽 permission not determined 🤔")
                     return completion(.notDetermined)
                 }
             }
         } else {
-            print("[🚨 Arek 🚨] 💽 permission denied by iOS ⛔️")
             return completion(.notAvailable)
         }
     }

@@ -111,17 +111,14 @@ open class ArekNotifications: ArekBasePermission, ArekPermissionProtocol {
                     return options
             })
             UNUserNotificationCenter.current().requestAuthorization(options: options) { (granted, error) in
-                if let error = error {
-                    print("[🚨 Arek 🚨] Push notifications permission not determined 🤔, error: \(error)")
+                if error != nil {
                     return completion(.notDetermined)
                 }
                 if granted {
                     self.registerForRemoteNotifications()
                     
-                    print("[🚨 Arek 🚨] Push notifications permission authorized by user ✅")
                     return completion(.authorized)
                 }
-                print("[🚨 Arek 🚨] Push notifications permission denied by user ⛔️")
                 return completion(.denied)
             }
         } else if #available(iOS 9.0, *) {

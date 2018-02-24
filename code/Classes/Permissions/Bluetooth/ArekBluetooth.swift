@@ -62,13 +62,10 @@ open class ArekBluetooth: ArekBasePermission, ArekPermissionProtocol {
         
         switch bluetooth.bluetoothManager.state {
         case .unsupported, .poweredOff, .resetting:
-            print("[🚨 Arek 🚨] bluetooth not available 🚫")
             return completion(.notAvailable)
         case .unauthorized:
-            print("[🚨 Arek 🚨] bluetooth not authorized by the user ⛔️")
             return completion(.denied)
         case .unknown:
-            print("[🚨 Arek 🚨] bluetooth could not be determined 🤔")
             return completion(.notDetermined)
         case .poweredOn:
             bluetooth.bluetoothManager?.startAdvertising(nil)

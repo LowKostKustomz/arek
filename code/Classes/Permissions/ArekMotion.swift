@@ -77,18 +77,15 @@ open class ArekMotion: ArekBasePermission, ArekPermissionProtocol {
             if let error = error as NSError? {
                 if error.code == Int(CMErrorMotionActivityNotAuthorized.rawValue) ||
                    error.code == Int(CMErrorNotAuthorized.rawValue) {
-                    print("[🚨 Arek 🚨] 🏃🏻 permission denied by user ⛔️")
                     
                     self.motionRequested = .denied
                     DispatchQueue.main.async { return completion(.denied) }
                 } else {
-                    print("[🚨 Arek 🚨] 🏃🏻 permission not determined 🤔")
                     
                     self.motionRequested = .notDetermined
                     DispatchQueue.main.async { return completion(.notDetermined) }
                 }
             } else {
-                print("[🚨 Arek 🚨] 🏃🏻 permission authorized by user ✅")
              
                 self.motionRequested = .authorized
                 DispatchQueue.main.async { return completion(.authorized) }

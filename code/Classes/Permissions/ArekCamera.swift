@@ -51,10 +51,8 @@ open class ArekCamera: ArekBasePermission, ArekPermissionProtocol {
     open func askForPermission(completion: @escaping ArekPermissionResponse) {
         AVCaptureDevice.requestAccess(for: .video) { (authorized) in
             if authorized {
-                print("[🚨 Arek 🚨] 📷 permission authorized by user ✅")
                 return completion(.authorized)
             }
-            print("[🚨 Arek 🚨] 📷 permission denied by user ⛔️")
             return completion(.denied)
         }
     }

@@ -59,20 +59,16 @@ open class ArekHealth: ArekBasePermission, ArekPermissionProtocol {
         
     open func askForPermission(completion: @escaping ArekPermissionResponse) {
         if self.hkSampleTypesToRead == nil && self.hkSampleTypesToShare == nil {
-            print("[🚨 Arek 🚨] 📈 no permissions specified 🤔")
             return completion(.notDetermined)
         }
         HKHealthStore().requestAuthorization(toShare: self.hkSampleTypesToShare, read: self.hkSampleTypesToRead) { (granted, error) in
-            if let error = error {
-                print("[🚨 Arek 🚨] 📈 permission not determined 🤔 error: \(error)")
+            if error != nil {
                 return completion(.notDetermined)
             }
             
             if granted {
-                print("[🚨 Arek 🚨] 📈 permission authorized by user ✅")
                 return completion(.authorized)
             }
-            print("[🚨 Arek 🚨] 📈 permission denied by user ⛔️")
             return completion(.denied)
         }
     }

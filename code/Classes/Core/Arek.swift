@@ -166,8 +166,6 @@ open class ArekBasePermission {
         
         if self.configuration.canPresentReEnablePopup(permission: permission) {
             self.presentReEnablePopup(title: self.reEnablePopupData.title, message: self.reEnablePopupData.message, image: self.reEnablePopupData.image, allowButtonTitle: self.reEnablePopupData.allowButtonTitle, denyButtonTitle: self.reEnablePopupData.denyButtonTitle)
-        } else {
-            print("[🚨 Arek 🚨] for \(self) present re-enable not allowed")
         }
     }
 

@@ -52,13 +52,10 @@ open class ArekPhoto: ArekBasePermission, ArekPermissionProtocol {
         PHPhotoLibrary.requestAuthorization { (status) in
             switch status {
             case .notDetermined:
-                print("[🚨 Arek 🚨] 🌅 permission not determined 🤔")
                 return completion(.notDetermined)
             case .restricted, .denied:
-                print("[🚨 Arek 🚨] 🌅 permission denied by user ⛔️")
                 return completion(.denied)
             case.authorized:
-                print("[🚨 Arek 🚨] 🌅 permission authorized by user ✅")
                 return completion(.authorized)
             }
         }

@@ -51,15 +51,12 @@ open class ArekReminders: ArekBasePermission, ArekPermissionProtocol {
     
     open func askForPermission(completion: @escaping ArekPermissionResponse) {
         EKEventStore().requestAccess(to: .reminder) { granted, error in
-            if let error = error {
-                print("[🚨 Arek 🚨] 🎗 permission error: \(error)")
+            if error != nil {
                 return completion(.notDetermined)
             }
             if granted {
-                print("[🚨 Arek 🚨] 🎗 permission authorized by user ✅")
                 return completion(.authorized)
             }
-            print("[🚨 Arek 🚨] 🎗 permission denied by user ⛔️")
             return completion(.denied)
         }
     }

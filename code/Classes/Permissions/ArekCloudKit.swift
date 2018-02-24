@@ -60,35 +60,29 @@ open class ArekCloudKit: ArekBasePermission, ArekPermissionProtocol {
     
     open func askForPermission(completion: @escaping ArekPermissionResponse) {
         CKContainer.default().accountStatus { (accountStatus, error) in
-            if let error = error {
-                print("[🚨 Arek 🚨] ☁️ accountStatus not determined 🤔 error: \(error)")
+            if error != nil {
                 return completion(.notDetermined)
             }
             
             switch accountStatus {
             case .available, .restricted:
                 CKContainer.default().requestApplicationPermission(CKApplicationPermissions.userDiscoverability, completionHandler: { applicationPermissionStatus, error in
-                    if let error = error {
-                        print("[🚨 Arek 🚨] ☁️ discoverability not determined 🤔 error: \(error)")
+                    if error != nil {
                         return completion(.notDetermined)
                     }
 
                     switch applicationPermissionStatus {
                     case .denied:
-                        print("[🚨 Arek 🚨] ☁️ discoverability denied by user ⛔️")
                         return completion(.denied)
                     case .granted:
-                        print("[🚨 Arek 🚨] ☁️ discoverability permission authorized by user ✅")
                         return completion(.authorized)
                     case .couldNotComplete, .initialState:
                         return completion(.notDetermined)
                     }
                 })
             case .noAccount:
-                print("[🚨 Arek 🚨] ☁️ account not configured ⛔️")
                 return completion(.denied)
             case .couldNotDetermine:
-                print("[🚨 Arek 🚨] ☁️ account not determined 🤔")
                 return completion(.notDetermined)
             }
         }
