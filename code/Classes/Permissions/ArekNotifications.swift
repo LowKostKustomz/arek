@@ -76,7 +76,8 @@ open class ArekNotifications: ArekBasePermission, ArekPermissionProtocol {
                     return completion(.notDetermined)
                 case .denied:
                     return completion(.denied)
-                case .authorized:
+                case .authorized,
+                     .provisional:
                     return completion(.authorized)
                 }
             }
@@ -86,16 +87,16 @@ open class ArekNotifications: ArekBasePermission, ArekPermissionProtocol {
                     return completion(.notDetermined)
                 }
             }
-            
+
             return completion(.authorized)
         }
     }
-        
+
     open func askForPermission(completion: @escaping ArekPermissionResponse) {
         if #available(iOS 10.0, *) {
             let options: UNAuthorizationOptions = self
                 .notificationTypes
-                .flatMap { $0.unAuthorizationOption }
+                .compactMap { $0.unAuthorizationOption }
                 .reduce(UNAuthorizationOptions(), { (result, option) -> UNAuthorizationOptions in
                     var options = result
                     options.insert(option)
@@ -115,7 +116,7 @@ open class ArekNotifications: ArekBasePermission, ArekPermissionProtocol {
         } else if #available(iOS 9.0, *) {
             let types = self
                 .notificationTypes
-                .flatMap { $0.uiUserNotificationType }
+                .compactMap { $0.uiUserNotificationType }
                 .reduce(UIUserNotificationType(), { (result, type) -> UIUserNotificationType in
                     var types = result
                     types.insert(type)

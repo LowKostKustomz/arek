@@ -42,23 +42,11 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return ArekCellVMServiceProgrammatically.numberOfVMs()
-        } else if section == 1 {
-            return ArekCellVMServiceLocalizable.numberOfVMs()
-        }
-        
         return 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArekCell", for: indexPath) as? ArekCell else { fatalError() }
-
-        if indexPath.section == 0 {
-            cell.viewModel = ArekCellVMServiceProgrammatically.buildVM(index: indexPath.row)
-        } else if indexPath.section == 1 {
-            cell.viewModel = ArekCellVMServiceLocalizable.buildVM(index: indexPath.row)
-        }
         
         return cell
     }
